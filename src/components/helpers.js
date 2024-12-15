@@ -12,8 +12,3 @@
 
         return shuffledArray
     }
-
-    export const handleImageClick = (clickedImages, url) => {
-        if(clickedImages.includes(url)) return clickedImages.length; 
-        return [...clickedImages, url]
-    }

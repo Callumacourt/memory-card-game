@@ -1,6 +1,6 @@
 import useImageGallery from "./images";
 import { useState, useEffect } from "react";
-import { shuffleImages, handleImageClick } from "./helpers";
+import { shuffleImages} from "./helpers";
 
 export default function HandleGame() {
     const { images, loading, error } = useImageGallery();
@@ -12,6 +12,15 @@ export default function HandleGame() {
             setCurrentImages(shuffleImages(images));
         }
     }, [images]);
+
+    const onImageClick = (url) => {
+            if (clickedImages.includes(url)) return;
+
+            const newClickedImages = [...clickedImages, url];
+            setClickedImages(newClickedImages);
+        
+            setCurrentImages(shuffleImages(currentImages));
+    }
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
