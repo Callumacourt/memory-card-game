@@ -43,7 +43,7 @@ const useImageGallery = () => {
             }
         };
         fetchImages();
-    }, []);
+    }, [] );
 
     return { images, loading, error };
 };
