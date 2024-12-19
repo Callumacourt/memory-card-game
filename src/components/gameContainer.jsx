@@ -8,17 +8,21 @@ export const GameContainer = () => {
 
     const handleScore = (isReset) => {
         if (isReset) {
-            setBestScore((prevBest) => Math.max(prevBest, score));
-            setScore(0)
+            setScore(0);
         } else {
-            setScore((prevScore) => prevScore + 1)
+            setScore((prevScore) => {
+                const newScore = prevScore + 1;
+                setBestScore((prevBest) => Math.max(prevBest, newScore));
+                return newScore;
+            });
         }
-    }
+    };
+    
 
     return (
         <>
     <Header score={score} bestScore={bestScore}/>
-    <HandleGame onScoreChange = {handleScore} />
+    <HandleGame onScoreChange = {handleScore}/>
         </>
     )
 }
