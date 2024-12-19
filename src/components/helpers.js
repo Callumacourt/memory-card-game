@@ -12,3 +12,12 @@
 
         return shuffledArray
     }
+
+
+    export const extractUrl = (image) => {
+            // Recursively drill down to the URL
+            while (Array.isArray(image)) {
+                image = image[0];
+            }
+            return image;
+            }

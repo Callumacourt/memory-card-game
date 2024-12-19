@@ -1,25 +1,39 @@
 import useImageGallery from "./images";
 import { useState, useEffect } from "react";
-import { shuffleImages} from "./helpers";
+import { shuffleImages, extractUrl } from "./helpers";
 
-export default function HandleGame() {
+export default function HandleGame({onScoreChange}) {
     const { images, loading, error } = useImageGallery();
     const [currentImages, setCurrentImages] = useState([]);
-    const [clickedImages, setClickedImages] = useState([]);
+    const [clickedImages, setClickedImages] = useState(new Set());
+
 
     useEffect(() => {
         if (images.length > 0) {
             setCurrentImages(shuffleImages(images));
+            // Reset clicked images when new images are loaded
+            setClickedImages(new Set());
         }
     }, [images]);
 
-    const onImageClick = (url) => {
-            if (clickedImages.includes(url)) return;
+    const onImageClick = (image) => {
+        // Extract the actual URL from the nested structure
+        const url = extractUrl(image);
 
-            const newClickedImages = [...clickedImages, url];
-            setClickedImages(newClickedImages);
-        
-            setCurrentImages(shuffleImages(currentImages));
+        // Check if the image has already been clicked
+        if (clickedImages.has(url)) {
+            onScoreChange(true); // Game over
+            setClickedImages(new Set()); // Reset clicked images
+            return;
+        }
+
+        // Create a new Set to track clicked images
+        const newClickedImages = new Set(clickedImages);
+        newClickedImages.add(url);
+        setClickedImages(newClickedImages);
+
+        onScoreChange(false); // Continue game
+        setCurrentImages(shuffleImages(currentImages));
     }
 
     if (loading) return <p>Loading...</p>;
@@ -27,14 +41,14 @@ export default function HandleGame() {
 
     return (
         <div className="cardsContainer">
-            {currentImages.map((url, index) => (
+            {currentImages.map((image, index) => (
                 <div 
                     className="card" 
-                    key={url} 
-                    onClick={() => onImageClick(url)}
+                    key={extractUrl(image)} 
+                    onClick={() => onImageClick(image)}
                 >
                     <img 
-                        src={url} 
+                        src={extractUrl(image)} 
                         alt={`Game card ${index + 1}`} 
                     />
                 </div>

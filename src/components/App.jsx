@@ -1,11 +1,10 @@
-import HandleGame from "./game"
-import Header from "./header"
+import { GameContainer } from "./gameContainer"
+
 
 export default function App(){
   return (
-    <>
-    <Header/>
-    <HandleGame/>
-    </>
+  <>
+    <GameContainer/>
+  </>
   )
 } 
